@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "WorkDay" ADD COLUMN     "flexDelta" DOUBLE PRECISION DEFAULT 0.0;

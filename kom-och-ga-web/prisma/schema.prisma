@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int  @id  @default(autoincrement())
+  username  String   @unique
+  email     String   @unique
+  password  String  
+  name      String
+  createdAt DateTime @default(now())
+  schedule   Schedule? 
+  workDays  WorkDay[]
+  flexSaldo     Float    @default(0.0)  
+  semesterSaldo Int      @default(0)    
+  kompSaldo     Float    @default(0.0)
+   subscriptions Subscription[]
+}
+model WorkDay {
+  id         Int   @id @default(autoincrement())
+  userId      Int    
+  user       User   @relation(fields: [userId], references: [id]) 
+  date       DateTime 
+  entries    TimeEntry[]
+  totalHours Float?
+  flexDelta    Float?    @default(0.0)  
+  completed  Boolean   @default(false)
+   @@unique([userId, date])
+}
+model TimeEntry {
+  id         Int   @id @default(autoincrement())
+  workDayId  Int 
+  workDay   WorkDay @relation(fields: [workDayId], references: [id])
+  type       EntryType
+  timestamp  DateTime @default(now())
+}
+
+
+enum EntryType {
+  CLOCK_IN
+  CLOCK_OUT
+  BREAK_START
+  BREAK_END
+}
+
+model Subscription {
+  id           Int   @id @default(autoincrement())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now()) @updatedAt
+  endpoint     String
+  subscription String
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, endpoint])
+}
+model Schedule {
+  id        Int  @id @default(autoincrement())
+  userId      Int    
+  user       User   @relation(fields: [userId], references: [id]) 
+  daysOfWeek String  
+   @@unique([userId])
+}
+
