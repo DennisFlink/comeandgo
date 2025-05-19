@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: comeandgo-web
+   namespace: comeandgo
+spec:
+   revisionHistoryLimit: 1
+   replicas: 1
+   selector:
+      matchLabels:
+         app: comeandgo-web
+   template:
+      metadata:
+         labels:
+            app: comeandgo-web
+      spec:
+         securityContext:
+            runAsNonRoot: true
+            seccompProfile:
+               type: RuntimeDefault
+         containers:
+            - name: comeandgo-web
+              image: harbor.vgregion.se/sysutv/utforskande/comeandgo/comeandgo-web:latest
+              imagePullPolicy: Always
+              ports:
+                 - containerPort: 3000
+              securityContext:
+                 allowPrivilegeEscalation: false
+                 capabilities:
+                    drop:
+                       - ALL
+              env:
+                 - name: DATABASE_URL
+                   valueFrom:
+                      secretKeyRef:
+                         name: comeandgo-secrets
+                         key: DATABASE_URL
+                 - name: SESSION_SECRET
+                   valueFrom:
+                      secretKeyRef:
+                         name: comeandgo-secrets
+                         key: SESSION_SECRET
+                 - name: VITE_VAPID_PUBLIC_KEY
+                   valueFrom:
+                      secretKeyRef:
+                         name: comeandgo-secrets
+                         key: VITE_VAPID_PUBLIC_KEY
+                 - name: VAPID_PRIVATE_KEY
+                   valueFrom:
+                      secretKeyRef:
+                         name: comeandgo-secrets
+                         key: VAPID_PRIVATE_KEY
+         imagePullSecrets:
+            - name: harbor-credentials

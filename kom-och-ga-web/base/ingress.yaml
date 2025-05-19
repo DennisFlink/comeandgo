@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+   name: comeandgo-web
+   namespace: comeandgo
+   annotations:
+      dns-managed-by/infoblox-dns-webhook: 'true'
+      nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
+      nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+
+spec:
+   ingressClassName: nginx
+   rules:
+      - host: comeandgo.vgregion.se
+        http:
+           paths:
+              - path: /
+                pathType: Prefix
+                backend:
+                   service:
+                      name: comeandgo-web
+                      port:
+                         number: 80

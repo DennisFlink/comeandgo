@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: postgres
+   namespace: comeandgo
+spec:
+   replicas: 1
+   selector:
+      matchLabels:
+         app: postgres
+   template:
+      metadata:
+         labels:
+            app: postgres
+      spec:
+         securityContext:
+            fsGroup: 70 # Matches the UID of the postgres user in the Alpine image
+            runAsNonRoot: true
+            runAsUser: 70
+            seccompProfile:
+               type: RuntimeDefault
+         containers:
+            - name: postgres
+              image: postgres:15-alpine
+              ports:
+                 - containerPort: 5432
+                   name: postgres
+                   protocol: TCP
+              securityContext:
+                 allowPrivilegeEscalation: false
+                 capabilities:
+                    drop:
+                       - ALL
+              env:
+                 - name: POSTGRES_USER
+                   value: myuser
+                 - name: POSTGRES_PASSWORD
+                   value: mypassword
+                 - name: POSTGRES_DB
+                   value: mydatabase
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: postgres
+   namespace: comeandgo
+spec:
+   selector:
+      app: postgres
+   ports:
+      - protocol: TCP
+        port: 5432
+        targetPort: 5432

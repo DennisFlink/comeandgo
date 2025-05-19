@@ -1,0 +1,80 @@
+@import 'tailwindcss';
+
+@theme {
+   --breakpoint-mobile: 320px;
+   --breakpoint-tablet: 768px;
+   --breakpoint-desktop: 1024px;
+
+   --font-sans: Verdana, Geneva, sans-serif;
+
+   --color-vgr-primary: hsl(200, 18%, 26%);
+   --color-vgr-primary-dark: hsl(201, 18%, 19%);
+   --color-vgr-bg-brown99: hsl(0, 9%, 98%);
+   --color-vgr-primary-color-dimmed: hsl(180, 3%, 94%);
+
+   --color-destructive: hsl(0, 100%, 50%);
+   --color-alert-yellow: hsl(44, 100%, 46%);
+   --color-alert-red: hsl(0, 100%, 26%);
+   --color-alert-icon-yellow: #c39d1d;
+   --color-alert-icon-red: #b10003;
+   --ring: oklch(0.708 0 0);
+   --foreground: oklch(0.145 0 0);
+   --accent: oklch(0.97 0 0);
+   --popover: hsl(0, 9%, 98%);
+   --popover-foreground: oklch(0.145 0 0);
+   --chart-2: oklch(0.6 0.118 184.704);
+   --chart-3: oklch(0.398 0.07 227.392);
+   --chart-4: oklch(0.828 0.189 84.429);
+   --chart-5: oklch(0.769 0.188 70.08);
+   --sidebar: oklch(0.985 0 0);
+   --sidebar-foreground: oklch(0.145 0 0);
+   --sidebar-primary: oklch(0.205 0 0);
+   --sidebar-primary-foreground: oklch(0.985 0 0);
+   --sidebar-accent: oklch(0.97 0 0);
+   --sidebar-accent-foreground: oklch(0.205 0 0);
+   --sidebar-border: oklch(0.922 0 0);
+   --sidebar-ring: oklch(0.708 0 0);
+
+   --spacing-xs: 4px;
+   --spacing-sm: 8px;
+   --spacing-md: 12px;
+   --spacing-lg: 24px;
+   --spacing-xl: 32px;
+   --spacing-safearea: 24px;
+
+   --radius-vgr-footer-lg-border-radius: 0 3.75rem 0 0;
+   --radius-vgr-footer-xl-border-radius: 0 5rem 0 0;
+   --radius-vgr-menu-item: 1.25rem 1.25rem 1.25rem 0;
+   --radius-vgr-mobile-menu-header-border-radius: 0 0 1.25rem 0;
+
+   --animate-fade-in-out: fade-in-out 4s ease-in-out;
+   --slide-in-from-right: slideInFromRight 0.5s ease-out;
+   --slide-out-to-right: slideOutToRight 0.3s ease-in;
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+   *,
+   ::after,
+   ::before,
+   ::backdrop,
+   ::file-selector-button {
+      border-color: var(--color-gray-200, currentColor);
+   }
+}
+
+html,
+body {
+   @apply bg-white dark:bg-gray-950;
+
+   @media (prefers-color-scheme: dark) {
+      color-scheme: dark;
+   }
+}
