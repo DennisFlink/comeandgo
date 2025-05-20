@@ -1,4 +1,4 @@
-# ⏱️ Kom och Gå – Tidsregistreringsapp (PWA)
+#  Kom och Gå – Tidsregistreringsapp (PWA)
 
 **Kom och Gå** är en progressiv webbapplikation (PWA) för enkel och smidig tidsregistrering. Appen gör det möjligt för användare att stämpla in och ut, registrera raster och få påminnelser – anpassad för både mobil och desktop.
 
@@ -6,7 +6,7 @@ Detta projekt utvecklades som en del av mitt examensarbete på Yrkeshögskolan i
 
 ---
 
-## 🚀 Funktioner
+##  Funktioner
 
 - In-/utstämpling och rastregistrering
 - Automatisk visning av dagsstatus
@@ -17,7 +17,7 @@ Detta projekt utvecklades som en del av mitt examensarbete på Yrkeshögskolan i
 
 ---
 
-## 🛠️ Teknikstack
+##  Teknikstack
 
 - **Frontend:** React, Remix, Tailwind CSS
 - **Språk:** TypeScript
