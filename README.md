@@ -1,64 +1,33 @@
-# comeandgovariables:
-   IMAGE_NAME: comeandgo-web
-   IMAGE_GROUP: utforskande/comeandgo
-   DOCKER_DRIVER: overlay2
-   IMAGE_TAG: '$CI_COMMIT_SHA'
+# ⏱️ Kom och Gå – Tidsregistreringsapp (PWA)
 
-before_script:
-   - apk update && apk add git
-   - git config --global user.name "CI/CD Bot"
-   - git config --global user.email "cicd-bot@git.vgregion.se"
-   - git config pull.rebase false
+**Kom och Gå** är en progressiv webbapplikation (PWA) för enkel och smidig tidsregistrering. Appen gör det möjligt för användare att stämpla in och ut, registrera raster och få påminnelser – anpassad för både mobil och desktop.
 
-stages: # List of stages for jobs, and their order of execution
-   - sync
-   - build
-   - containerize
+Detta projekt utvecklades som en del av mitt examensarbete på Yrkeshögskolan i Borås, med målet att skapa en tillgänglig, modern och användarvänlig lösning för tidsrapportering.
 
-build-job: # This job runs in the build stage, which runs first.
-   stage: build
+---
 
-   #image: maven:3.8.1-jdk-17
+## 🚀 Funktioner
 
-   script:
-      - echo "Compiling the code..."
-      #  - mvn clean install -DskipTests
-      - echo "Compile complete."
-   except:
-      - schedules
+- In-/utstämpling och rastregistrering
+- Automatisk visning av dagsstatus
+- Web push-notiser för påminnelse
+- Responsiv design – mobil och desktop
+- PWA-stöd (offline, installera som app)
+- Planerad: geolocation-notis vid närhet till kontor
 
-sync_with_github:
-   stage: sync
-   script:
-      - echo $CI_REPOSITORY_URL
-      #https://oauth2:$ACCESS_TOKEN@
-      - git remote add gitlab https://gitlab-ci-token:${SERVICE_ACCOUNT_TOKEN}@${REPOSITORY_URL}
-      - git fetch gitlab
-      - git fetch origin
-      - git checkout main || git checkout -b main
-      - git pull gitlab main
-      - git pull origin master --allow-unrelated-histories
-      - git merge origin/master
-      - git push gitlab main
+---
 
-   only:
-      - schedules
+## 🛠️ Teknikstack
 
-build-push-oci-job:
-   stage: containerize
-   tags:
-      - shared-dind
-   image: docker:20.10.24
-   services:
-      - docker:20.10.24-dind
-   before_script:
-      - echo "$HARBOR_PASSWORD" | docker login -u "$HARBOR_USER" --password-stdin $HARBOR_URL
-      - echo "logged in to harbor"
-   script:
-      - docker build -t $IMAGE_NAME:$IMAGE_TAG -f kom-och-ga-web/Dockerfile kom-och-ga-web/
-      - docker tag $IMAGE_NAME:$IMAGE_TAG $HARBOR_URL/$HARBOR_PROJECT/$IMAGE_GROUP/$IMAGE_NAME:$IMAGE_TAG
-      - docker tag $IMAGE_NAME:$IMAGE_TAG $HARBOR_URL/$HARBOR_PROJECT/$IMAGE_GROUP/$IMAGE_NAME:latest
-      - docker push $HARBOR_URL/$HARBOR_PROJECT/$IMAGE_GROUP/$IMAGE_NAME:$IMAGE_TAG
-      - docker push $HARBOR_URL/$HARBOR_PROJECT/$IMAGE_GROUP/$IMAGE_NAME:latest
-   rules:
-      - if: '$CI_COMMIT_BRANCH == "main"'
+- **Frontend:** React, Remix, Tailwind CSS
+- **Språk:** TypeScript
+- **Databas:** PostgreSQL
+- **Backend:** Remix loaders/actions
+- **Testning:** Playwright
+- **Deployment (lokalt):** Docker, Docker Compose
+- **Övrigt:** Web Push, VAPID-nycklar, Git
+
+---
+
+
+
